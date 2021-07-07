@@ -2,7 +2,8 @@
 
 enum hDummyHMENU
 {
-	ServerIpStatic = 100,
+	DummyClientStatic = 300,
+	ServerIpStatic,
 	ServerPortStatic,
 	DummyClientNum,
 	ServerIpEdit,
@@ -18,6 +19,8 @@ enum hDummyHMENU
 
 class dummyClientWindow
 {
+	HWND hDummyClientStatic;
+
 	HWND hServerIpStatic;
 	HWND hServerPortStatic;
 	HWND hDummyClientNum;
@@ -33,9 +36,15 @@ class dummyClientWindow
 	HWND hDummyClientNum1000Button;
 
 	HWND hDummyWriteEdit;
+	int dummyClientNum;
 public:
 	dummyClientWindow();
 	~dummyClientWindow();
 	void CreateDummyClientWindow(HWND hWnd, HINSTANCE hInst);
+	HWND GethDummyClientNumEdit() { return hDummyClientNumEdit; }
+	HWND GethServerIpEdit() { return hServerIpEdit; }
+	HWND GethServerPortEdit() { return hServerPortEdit; }
+	HWND GethDummyWriteEdit() { return hDummyWriteEdit; }
+	void SetDummyClientNum(int num) { dummyClientNum = num; }
 };
 

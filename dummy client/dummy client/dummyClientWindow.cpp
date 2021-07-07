@@ -13,6 +13,11 @@ dummyClientWindow::~dummyClientWindow()
 
 void dummyClientWindow::CreateDummyClientWindow(HWND hWnd, HINSTANCE hInst)
 {
+
+	hDummyClientStatic = CreateWindowW(L"static", L" ¡Ú¡Ù¡Ú Dummy Client Maker ¡Ú¡Ù¡Ú ",
+		WS_CHILD | WS_VISIBLE | WS_BORDER,
+		80, 15, 250, 22, hWnd, (HMENU)DummyClientStatic, hInst, NULL);
+
 	hServerIpStatic = CreateWindowW(L"static", L"       I P       : ",
 		WS_CHILD | WS_VISIBLE | WS_BORDER,
 		20, 50, 80, 22, hWnd, (HMENU)ServerIpStatic, hInst, NULL);
@@ -61,6 +66,9 @@ void dummyClientWindow::CreateDummyClientWindow(HWND hWnd, HINSTANCE hInst)
 
 	//writeEdit
 	hDummyWriteEdit = CreateWindowW(L"edit", NULL,
-		WS_CHILD | WS_VISIBLE | WS_BORDER | ES_READONLY | ES_AUTOHSCROLL | ES_AUTOVSCROLL ,
+		//WS_CHILD | WS_VISIBLE | WS_BORDER | ES_READONLY | ES_AUTOHSCROLL | ES_AUTOVSCROLL ,
+		WS_CHILD | WS_VISIBLE | ES_READONLY |
+		WS_HSCROLL | WS_VSCROLL |
+		ES_AUTOHSCROLL | ES_AUTOVSCROLL | ES_MULTILINE,
 		230, 150, 150, 200, hWnd, (HMENU)DummyWriteEdit, hInst, NULL);
 }

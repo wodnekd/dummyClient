@@ -5,12 +5,14 @@
 #include "dummy client.h"
 
 #define MAX_LOADSTRING 100
+#define BUFSIZE	   512
 
 // 전역 변수:
 HINSTANCE hInst;                                // 현재 인스턴스입니다.
 WCHAR szTitle[MAX_LOADSTRING];                  // 제목 표시줄 텍스트입니다.
 WCHAR szWindowClass[MAX_LOADSTRING];            // 기본 창 클래스 이름입니다.
 
+void DisplayText(LPWSTR fmt, ...);
 // 이 코드 모듈에 들어 있는 함수의 정방향 선언입니다.
 ATOM                MyRegisterClass(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);
@@ -121,15 +123,15 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 //  WM_DESTROY  - 종료 메시지를 게시하고 반환합니다.
 //
 //
+#pragma warning(disable: 4996)
+dummyClientWindow dm;
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-
     switch (message)
     {
 	case WM_CREATE:
 	{
 		SetWindowPos(hWnd, NULL, 100, 100, 420, 400, 0);
-		dummyClientWindow dm;
 		dm.CreateDummyClientWindow(hWnd, hInst);
 	}
 	break;
@@ -139,6 +141,83 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             // 메뉴 선택을 구문 분석합니다.
             switch (wmId)
             {
+			case CreateClientButton:
+			{
+				WCHAR wcharIP[20] = L"";
+				char charIP[20] = "";
+				WCHAR wcharPORT[20] = L"";
+				int intPORT = 0;
+				GetWindowText(dm.GethServerIpEdit(), wcharIP, 20);
+				wcstombs(charIP, wcharIP, 20);
+				GetWindowText(dm.GethServerPortEdit(), wcharPORT, 20);
+				intPORT = _wtoi(wcharPORT);
+
+				WCHAR clientNum[100] = L"";
+				int createClientNum;
+				GetWindowText(dm.GethDummyClientNumEdit(), clientNum, 100);
+				createClientNum = _wtoi(clientNum);
+
+				for (int i = 0; i < createClientNum; i++)
+				{
+					//윈속 초기화
+					WSADATA wsa;
+					if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0) break;
+					//socket 생성
+					SOCKET clientSock = socket(AF_INET, SOCK_STREAM, 0);
+					if (clientSock == INVALID_SOCKET)
+						MessageBox(hWnd, L"CreateSock, socket error", L"clientSock == INVALID_SOCKET", MB_OK);
+					int retval;
+					SOCKADDR_IN serveraddr;
+					ZeroMemory(&serveraddr, sizeof(serveraddr));
+					serveraddr.sin_family = AF_INET;
+					serveraddr.sin_addr.s_addr = inet_addr(charIP);
+					serveraddr.sin_port = htons(intPORT);
+					retval = connect(clientSock, (SOCKADDR *)&serveraddr, sizeof(serveraddr));
+					DisplayText(L"create %d dummy client \r\n ", i+1);
+				}
+
+			}
+			break;
+			case DummyClientNum50Button:
+			{
+				WCHAR clientNum[100]=L"";
+				int i;
+				GetWindowText(dm.GethDummyClientNumEdit(), clientNum, 100);
+				i = _wtoi(clientNum) + 50;
+				_itow(i, clientNum, 10);
+				SetWindowText(dm.GethDummyClientNumEdit(), clientNum);
+			}
+			break;
+			case DummyClientNum100Button:
+			{
+				WCHAR clientNum[100] = L"";
+				int i;
+				GetWindowText(dm.GethDummyClientNumEdit(), clientNum, 100);
+				i = _wtoi(clientNum) + 100;
+				_itow(i, clientNum, 10);
+				SetWindowText(dm.GethDummyClientNumEdit(), clientNum);
+			}
+			break;
+			case DummyClientNum500Button:
+			{
+				WCHAR clientNum[100] = L"";
+				int i;
+				GetWindowText(dm.GethDummyClientNumEdit(), clientNum, 100);
+				i = _wtoi(clientNum) + 500;
+				_itow(i, clientNum, 10);
+				SetWindowText(dm.GethDummyClientNumEdit(), clientNum);
+			}
+			break;
+			case DummyClientNum1000Button:
+			{
+				WCHAR clientNum[100] = L"";
+				int i;
+				GetWindowText(dm.GethDummyClientNumEdit(), clientNum, 100);
+				i = _wtoi(clientNum) + 1000;
+				_itow(i, clientNum, 10);
+				SetWindowText(dm.GethDummyClientNumEdit(), clientNum);
+			}
+			break;
             case IDM_ABOUT:
                 DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
                 break;
@@ -185,4 +264,20 @@ INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
         break;
     }
     return (INT_PTR)FALSE;
+}
+
+
+void DisplayText(LPWSTR fmt, ...)
+{
+	va_list arg;
+	va_start(arg, fmt);
+
+	WCHAR cbuf[BUFSIZE + 256];
+	vswprintf(cbuf, BUFSIZE + 256, fmt, arg);
+
+	int nLength = GetWindowTextLength(dm.GethDummyWriteEdit());
+	SendMessage(dm.GethDummyWriteEdit(), EM_SETSEL, nLength, nLength);
+	SendMessage(dm.GethDummyWriteEdit(), EM_REPLACESEL, FALSE, (LPARAM)cbuf);
+
+	va_end(arg);
 }
