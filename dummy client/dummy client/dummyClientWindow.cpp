@@ -21,7 +21,8 @@ void dummyClientWindow::CreateDummyClientWindow(HWND hWnd, HINSTANCE hInst)
 	hServerIpStatic = CreateWindowW(L"static", L"       I P       : ",
 		WS_CHILD | WS_VISIBLE | WS_BORDER,
 		20, 50, 80, 22, hWnd, (HMENU)ServerIpStatic, hInst, NULL);
-	SendMessage(hServerIpStatic, EM_LIMITTEXT, (WPARAM)4, 0);
+
+	//SendMessage(hServerIpStatic, EM_LIMITTEXT, (WPARAM)4, 0);
 	hServerPortStatic = CreateWindowW(L"static", L"    PORT     : ",
 		WS_CHILD | WS_VISIBLE | WS_BORDER,
 		20, 80, 80, 22, hWnd, (HMENU)ServerPortStatic, hInst, NULL);
@@ -30,9 +31,14 @@ void dummyClientWindow::CreateDummyClientWindow(HWND hWnd, HINSTANCE hInst)
 		WS_CHILD | WS_VISIBLE | WS_BORDER,
 		20, 110, 80, 22, hWnd, (HMENU)DummyClientNum, hInst, NULL);
 
-	hServerIpEdit = CreateWindowW(L"edit", NULL,
+	//hServerIpEdit = CreateWindowW(L"edit", NULL,
+	//	WS_CHILD | WS_VISIBLE | WS_BORDER,
+	//	120, 50, 100, 22, hWnd, (HMENU)ServerIpEdit, hInst, NULL);
+
+	hServerIpEdit = CreateWindowW(L"SysIPAddress32", NULL,
 		WS_CHILD | WS_VISIBLE | WS_BORDER,
-		120, 50, 100, 22, hWnd, (HMENU)ServerIpEdit, hInst, NULL);
+		120, 50, 255, 22, hWnd, (HMENU)ServerIpEdit, hInst, NULL);
+
 
 	hServerPortEdit = CreateWindowW(L"edit", NULL,
 		WS_CHILD | WS_VISIBLE | WS_BORDER,
@@ -45,7 +51,7 @@ void dummyClientWindow::CreateDummyClientWindow(HWND hWnd, HINSTANCE hInst)
 	//CreateClientButton
 	hCreateClientButton = CreateWindowW(L"button", L"create",
 		WS_CHILD | WS_VISIBLE | WS_BORDER,
-		230, 50, 150, 85, hWnd, (HMENU)CreateClientButton, hInst, NULL);
+		230, 80, 150, 55, hWnd, (HMENU)CreateClientButton, hInst, NULL);
 
 	//clientNumSend
 	hDummyClientNum50Button = CreateWindowW(L"button", L"50",
